@@ -1,0 +1,700 @@
+/* ════════════════════════════════════════════════════════════════════════════════
+ MAIN STYLES - Pharmacy Management System
+ 
+ PURPOSE:
+ - Base styling for all pages
+ - Color scheme and design system
+ - Common components (forms, buttons, cards)
+ - Responsive design and RTL support
+ ════════════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --bg: #f4f0eb;
+  --bg2: #ebe5dd;
+  --card: #fff;
+  --pri: #2d6a4f;
+  --pri-l: #40916c;
+  --pri-p: #d8f3dc;
+  --acc: #e76f51;
+  --acc-p: #fde8e0;
+  --wrn: #f4a261;
+  --wrn-p: #fef0e0;
+  --txt: #1a1a1a;
+  --txt2: #6b705c;
+  --txt3: #a5a58d;
+  --brd: #e0dad0;
+  --ok: #52b788;
+  --err: #e63946;
+  --err-p: #fdecea;
+  --gold: #c9a227;
+  --gold-p: #fff8e1;
+  --sh: 0 2px 12px rgba(45, 106, 79, 0.08);
+  --r: 16px;
+  --rs: 10px;
+  --st: env(safe-area-inset-top, 20px);
+  --sb: env(safe-area-inset-bottom, 0px);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: "Cairo", sans-serif;
+  background: var(--bg);
+  color: var(--txt);
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════════
+ HEADER & NAVIGATION
+ ════════════════════════════════════════════════════════════════════════════════ */
+
+.stbar {
+  height: var(--st);
+  background: var(--card);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+.hdr {
+  position: fixed;
+  top: var(--st);
+  left: 0;
+  right: 0;
+  z-index: 999;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 11px 18px 13px;
+  border-bottom: 1px solid var(--brd);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hdr-t {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--pri);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hdr-b {
+  width: 36px;
+  height: 36px;
+  border-radius: 11px;
+  border: none;
+  background: var(--pri-p);
+  color: var(--pri);
+  font-size: 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.2s;
+}
+
+.hdr-b:active {
+  transform: scale(0.92);
+  background: var(--pri);
+  color: #fff;
+}
+
+.hdr-bk {
+  background: none;
+  color: var(--pri);
+  font-size: 17px;
+}
+
+#saveInd {
+  font-size: 11px;
+  transition: all 0.4s;
+  opacity: 0.4;
+}
+
+#saveInd.ok {
+  color: var(--ok);
+  opacity: 1;
+}
+
+#saveInd.err {
+  color: var(--err);
+  opacity: 1;
+}
+
+#saveInd.saving {
+  color: var(--wrn);
+  opacity: 1;
+  animation: dbpulse 0.6s infinite;
+}
+
+@keyframes dbpulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.2;
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════════════════════
+ MAIN CONTENT & PAGES
+ ════════════════════════════════════════════════════════════════════════════════ */
+
+.mc {
+  padding-top: calc(var(--st) + 66px);
+  padding-bottom: calc(78px + var(--sb));
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+.pg {
+  display: none;
+  animation: fs 0.3s ease;
+}
+
+.pg.act {
+  display: block;
+}
+
+@keyframes fs {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════════════════════
+ BOTTOM NAVIGATION
+ ════════════════════════════════════════════════════════════════════════════════ */
+
+.bn {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid var(--brd);
+  display: flex;
+  padding: 7px 0 calc(7px + var(--sb));
+  z-index: 999;
+}
+
+.ni {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 5px 0;
+  border: none;
+  background: none;
+  color: var(--txt3);
+  font-family: "Cairo";
+  font-size: 9px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.ni i {
+  font-size: 19px;
+}
+
+.ni.act {
+  color: var(--pri);
+}
+
+.ni.act i {
+  transform: scale(1.1);
+}
+
+.na {
+  position: relative;
+  top: -16px;
+  width: 50px !important;
+  height: 50px;
+  border-radius: 50% !important;
+  background: var(--pri) !important;
+  color: #fff !important;
+  font-size: 22px !important;
+  box-shadow: 0 4px 14px rgba(45, 106, 79, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none !important;
+  padding: 0 !important;
+  gap: 0 !important;
+}
+
+.na:active {
+  transform: scale(0.9);
+}
+
+/* ════════════════════════════════════════════════════════════════════════════════
+ CARDS & CONTAINERS
+ ════════════════════════════════════════════════════════════════════════════════ */
+
+.cd {
+  background: var(--card);
+  border-radius: var(--r);
+  padding: 16px;
+  margin: 0 14px 10px;
+  box-shadow: var(--sh);
+  border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+/* ════════════════════════════════════════════════════════════════════════════════
+ SCROLLABLE SECTIONS
+ ════════════════════════════════════════════════════════════════════════════════ */
+
+.sr {
+  display: flex;
+  gap: 8px;
+  padding: 12px 14px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.sr::-webkit-scrollbar {
+  display: none;
+}
+
+.sc {
+  min-width: 85px;
+  background: var(--card);
+  border-radius: var(--r);
+  padding: 10px;
+  box-shadow: var(--sh);
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.si {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 5px;
+  font-size: 15px;
+}
+
+.sn {
+  font-size: 18px;
+  font-weight: 900;
+  line-height: 1;
+  margin-bottom: 1px;
+}
+
+.sl {
+  font-size: 9px;
+  color: var(--txt2);
+  font-weight: 600;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════════
+ ZONE CHIPS
+ ════════════════════════════════════════════════════════════════════════════════ */
+
+.zc {
+  display: flex;
+  gap: 6px;
+  padding: 10px 14px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.zc::-webkit-scrollbar {
+  display: none;
+}
+
+.zchip {
+  padding: 8px 12px;
+  border-radius: 20px;
+  border: 2px solid var(--brd);
+  background: var(--card);
+  color: var(--txt2);
+  font-family: "Cairo";
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: 0.2s;
+  flex-shrink: 0;
+}
+
+.zchip.act {
+  background: var(--pri);
+  color: #fff;
+  border-color: var(--pri);
+  box-shadow: 0 2px 8px rgba(45, 106, 79, 0.3);
+}
+
+.zchip:active {
+  transform: scale(0.95);
+}
+
+/* ════════════════════════════════════════════════════════════════════════════════
+ FORMS & INPUTS
+ ════════════════════════════════════════════════════════════════════════════════ */
+
+.fg {
+  margin-bottom: 12px;
+}
+
+.fl {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--txt2);
+  margin-bottom: 4px;
+}
+
+.fi,
+.fta {
+  width: 100%;
+  padding: 11px 13px;
+  border: 2px solid var(--brd);
+  border-radius: var(--rs);
+  font-family: "Cairo";
+  font-size: 13px;
+  color: var(--txt);
+  background: var(--card);
+  transition: 0.2s;
+  outline: none;
+}
+
+.fi:focus,
+.fta:focus {
+  border-color: var(--pri);
+  box-shadow: 0 0 0 3px rgba(45, 106, 79, 0.1);
+}
+
+.fta {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.fr {
+  display: flex;
+  gap: 8px;
+}
+
+.fr .fg {
+  flex: 1;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════════
+ BUTTONS
+ ════════════════════════════════════════════════════════════════════════════════ */
+
+.bt {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 12px 20px;
+  border-radius: var(--rs);
+  border: none;
+  font-family: "Cairo";
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s;
+  width: 100%;
+}
+
+.bt:active {
+  transform: scale(0.97);
+}
+
+.bt-p {
+  background: var(--pri);
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(45, 106, 79, 0.25);
+}
+
+.bt-o {
+  background: none;
+  border: 2px solid var(--brd);
+  color: var(--txt);
+}
+
+.bt-d {
+  background: var(--err);
+  color: #fff;
+}
+
+.bt-g {
+  background: var(--gold);
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(201, 162, 39, 0.25);
+}
+
+.bt-sm {
+  padding: 8px 12px;
+  font-size: 11px;
+  width: auto;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════════
+ TABS
+ ════════════════════════════════════════════════════════════════════════════════ */
+
+.tb {
+  display: flex;
+  padding: 0 14px;
+  gap: 4px;
+  margin-bottom: 12px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.tb::-webkit-scrollbar {
+  display: none;
+}
+
+.tbtn {
+  padding: 6px 10px;
+  border-radius: 16px;
+  border: none;
+  background: var(--bg2);
+  color: var(--txt2);
+  font-family: "Cairo";
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: 0.2s;
+  flex-shrink: 0;
+}
+
+.tbtn.act {
+  background: var(--pri);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(45, 106, 79, 0.3);
+}
+
+.tc {
+  display: none;
+  animation: fs 0.25s ease;
+}
+
+.tc.act {
+  display: block;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════════
+ LIST ITEMS
+ ════════════════════════════════════════════════════════════════════════════════ */
+
+.ti {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--brd);
+}
+
+.ti:last-child {
+  border-bottom: none;
+}
+
+.tic {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.tinf {
+  flex: 1;
+  min-width: 0;
+}
+
+.tin {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.tid {
+  font-size: 10px;
+  color: var(--txt2);
+  margin-top: 1px;
+}
+
+.tip {
+  font-size: 10px;
+  color: var(--gold);
+  font-weight: 700;
+  margin-top: 1px;
+}
+
+.ta {
+  display: flex;
+  gap: 4px;
+}
+
+.ib {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.ib:active {
+  transform: scale(0.9);
+}
+
+.ib-e {
+  background: var(--pri-p);
+  color: var(--pri);
+}
+
+.ib-d {
+  background: var(--err-p);
+  color: var(--err);
+}
+
+/* ════════════════════════════════════════════════════════════════════════════════
+ LOADING & ANIMATIONS
+ ════════════════════════════════════════════════════════════════════════════════ */
+
+.loading {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--pri);
+  animation: spin 0.6s infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════════════════════
+ BACKGROUND BLUR EFFECTS
+ ════════════════════════════════════════════════════════════════════════════════ */
+
+.cd,
+.sr,
+.ms,
+.mo,
+.tt,
+.bd {
+  position: relative;
+  z-index: 1;
+}
+
+.bgb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(70px);
+  opacity: 0.1;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.bgb1 {
+  width: 250px;
+  height: 250px;
+  background: var(--pri);
+  top: -80px;
+  right: -60px;
+}
+
+.bgb2 {
+  width: 200px;
+  height: 200px;
+  background: var(--acc);
+  bottom: 80px;
+  left: -60px;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════════
+ EMPTY STATE
+ ════════════════════════════════════════════════════════════════════════════════ */
+
+.et {
+  text-align: center;
+  padding: 32px 20px;
+  color: var(--txt2);
+}
+
+.et-i {
+  font-size: 40px;
+  margin-bottom: 10px;
+  opacity: 0.3;
+}
+
+.et-t {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════════
+ TOAST NOTIFICATIONS
+ ════════════════════════════════════════════════════════════════════════════════ */
+
+.tt {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%) translateY(120px);
+  padding: 12px 20px;
+  border-radius: 20px;
+  background: var(--pri);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+  max-width: 90%;
+  z-index: 2000;
+  transition: transform 0.3s ease;
+  pointer-events: none;
+}
+
+.tt.show {
+  transform: translateX(-50%) translateY(0);
+}

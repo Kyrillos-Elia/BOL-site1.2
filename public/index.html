@@ -1,0 +1,1291 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover"
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="نظام إدارة الصيدلية" />
+    <title>نظام إدارة الصيدلية - أخوة الرب</title>
+
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Font Awesome Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+
+    <!-- XLSX Library for Excel Export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+    <!-- html2pdf for Arabic PDF Export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="css/main.css" />
+  </head>
+
+  <body>
+    <div class="bgb bgb1"></div>
+    <div class="bgb bgb2"></div>
+    <div class="stbar"></div>
+
+    <!-- HEADER -->
+    <header class="hdr" id="HDR">
+      <button
+        class="hdr-b hdr-bk"
+        id="HBack"
+        style="display: none"
+        onclick="goBack()"
+      >
+        <i class="fas fa-chevron-right"></i>
+      </button>
+      <span class="hdr-t" id="HTitle"
+        >نظام إدارة الصيدلية
+        <span id="saveInd"><i class="fas fa-database"></i></span
+      ></span>
+      <button
+        class="hdr-b"
+        id="HAct"
+        style="display: none"
+        onclick="headerAction()"
+      >
+        <i class="fas fa-ellipsis-v"></i>
+      </button>
+      <button
+        class="hdr-b"
+        id="HLogout"
+        onclick="handleLogout()"
+        title="تسجيل خروج"
+      >
+        <i class="fas fa-sign-out-alt"></i>
+      </button>
+    </header>
+
+    <!-- LOGIN PAGE -->
+    <div
+      class="login-wrapper"
+      id="pg-login"
+      style="
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: var(--bg);
+        z-index: 2000;
+        overflow-y: auto;
+      "
+    >
+      <div
+        style="
+          padding: 20px;
+          max-width: 500px;
+          margin: 0 auto;
+          display: flex;
+          flex-direction: column;
+          min-height: 100vh;
+          justify-content: center;
+        "
+      >
+        <!-- Logo -->
+        <div style="text-align: center; margin-bottom: 40px">
+          <div style="font-size: 60px; margin-bottom: 15px">
+            <i class="fas fa-hospital-user" style="color: var(--pri)"></i>
+          </div>
+          <h1
+            style="
+              color: var(--pri);
+              font-size: 24px;
+              font-weight: 900;
+              margin-bottom: 5px;
+            "
+          >
+            نظام إدارة الصيدلية
+          </h1>
+          <p style="color: var(--txt2); font-size: 12px">أخوة الرب</p>
+        </div>
+
+        <!-- LOGIN FORM -->
+        <div class="cd" id="loginForm">
+          <h2
+            style="
+              text-align: center;
+              margin-bottom: 20px;
+              color: var(--txt);
+              font-size: 16px;
+              font-weight: 700;
+            "
+          >
+            تسجيل الدخول
+          </h2>
+
+          <div class="fg">
+            <label class="fl">اسم المستخدم</label>
+            <input
+              type="text"
+              class="fi"
+              id="loginUsername"
+              placeholder="أدخل اسم المستخدم"
+            />
+          </div>
+
+          <div class="fg">
+            <label class="fl">كلمة السر</label>
+            <input
+              type="password"
+              class="fi"
+              id="loginPassword"
+              placeholder="أدخل كلمة السر"
+            />
+          </div>
+
+          <button
+            class="bt bt-p"
+            onclick="handleLogin()"
+            style="margin-bottom: 12px"
+          >
+            <i class="fas fa-sign-in-alt"></i> دخول
+          </button>
+
+          <div
+            style="
+              text-align: center;
+              font-size: 12px;
+              color: var(--txt2);
+              padding: 12px;
+              background: var(--pri-p);
+              border-radius: var(--rs);
+            "
+          >
+            <strong>حسابات تجريبية:</strong><br />
+            Admin: admin-001 / admin123<br />
+            Staff: user-001 / staff123
+          </div>
+        </div>
+
+        <!-- SIGNUP FORM -->
+        <div class="cd" id="signupForm" style="display: none">
+          <h2
+            style="
+              text-align: center;
+              margin-bottom: 20px;
+              color: var(--txt);
+              font-size: 16px;
+              font-weight: 700;
+            "
+          >
+            إنشاء حساب جديد
+          </h2>
+
+          <div class="fg">
+            <label class="fl">الاسم الكامل</label>
+            <input
+              type="text"
+              class="fi"
+              id="signupName"
+              placeholder="أدخل اسمك الكامل"
+            />
+          </div>
+
+          <div class="fg">
+            <label class="fl">اسم المستخدم</label>
+            <input
+              type="text"
+              class="fi"
+              id="signupUsername"
+              placeholder="اختر اسم مستخدم"
+            />
+          </div>
+
+          <div class="fg">
+            <label class="fl">كلمة السر</label>
+            <input
+              type="password"
+              class="fi"
+              id="signupPassword"
+              placeholder="أدخل كلمة سر قوية"
+            />
+          </div>
+
+          <div class="fg">
+            <label class="fl">تأكيد كلمة السر</label>
+            <input
+              type="password"
+              class="fi"
+              id="signupConfirmPassword"
+              placeholder="أعد إدخال كلمة السر"
+            />
+          </div>
+
+          <button
+            class="bt bt-p"
+            onclick="handleSignup()"
+            style="margin-bottom: 12px"
+          >
+            <i class="fas fa-user-plus"></i> إنشاء حساب
+          </button>
+        </div>
+
+        <!-- Toggle Auth Mode -->
+        <div style="text-align: center; font-size: 12px; margin-top: 15px">
+          <button
+            style="
+              background: none;
+              border: none;
+              color: var(--pri);
+              cursor: pointer;
+              text-decoration: underline;
+              font-weight: 600;
+            "
+            onclick="toggleAuthMode()"
+          >
+            <span id="authModeText">ليس لديك حساب؟ أنشئ حساب</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="mc">
+      <!-- HOME PAGE -->
+      <div class="pg act" id="pg-home">
+        <div class="zc" id="zoneChips"></div>
+        <div class="sr" id="statsRow"></div>
+        <div style="display: flex; gap: 8px; padding: 12px 14px">
+          <input
+            type="search"
+            class="fi"
+            placeholder="ابحث عن عائلة..."
+            id="searchInput"
+            oninput="debounce(loadFamiliesForHome, 300)"
+          />
+        </div>
+        <div id="familiesList"></div>
+      </div>
+
+      <!-- FAMILIES PAGE -->
+      <div class="pg" id="pg-families">
+        <div style="padding: 14px">
+          <div class="cd">
+            <div class="fg">
+              <label class="fl">اسم رب الأسرة *</label>
+              <input
+                type="text"
+                class="fi"
+                id="familyName"
+                placeholder="اسم رباعي"
+              />
+            </div>
+            <div class="fr">
+              <div class="fg">
+                <label class="fl">الرقم القومي</label>
+                <input
+                  type="text"
+                  class="fi"
+                  id="familyNID"
+                  placeholder="14 رقم"
+                  maxlength="14"
+                  style="font-family: monospace; letter-spacing: 1px"
+                />
+              </div>
+              <div class="fg">
+                <label class="fl">المنطقة *</label>
+                <select class="fi" id="familyZone"></select>
+              </div>
+            </div>
+            <div class="fr">
+              <div class="fg">
+                <label class="fl">الهاتف</label>
+                <input
+                  type="tel"
+                  class="fi"
+                  id="familyPhone"
+                  placeholder="01xxxxxxxxx"
+                />
+              </div>
+              <div class="fg">
+                <label class="fl">عدد أفراد الأسرة</label>
+                <input
+                  type="number"
+                  class="fi"
+                  id="familyMembers"
+                  placeholder="0"
+                  min="0"
+                />
+              </div>
+            </div>
+            <div class="fg">
+              <label class="fl">العنوان</label>
+              <input
+                type="text"
+                class="fi"
+                id="familyAddress"
+                placeholder="المحافظة - المدينة"
+              />
+            </div>
+            <div class="fr">
+              <div class="fg">
+                <label class="fl">الفئة *</label>
+                <select class="fi" id="familyCategory">
+                  <option value="A">أ (فئة أ)</option>
+                  <option value="B">ب (فئة ب)</option>
+                  <option value="C">ج (فئة ج)</option>
+                </select>
+              </div>
+              <div class="fg">
+                <label class="fl">ملاحظات</label>
+                <input
+                  type="text"
+                  class="fi"
+                  id="familyNotes"
+                  placeholder="ملاحظات"
+                />
+              </div>
+            </div>
+            <button class="bt bt-p" id="saveFamilyBtn" onclick="saveFamily()">
+              <i class="fas fa-save"></i> حفظ العائلة
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- MEDICINES PAGE -->
+      <div class="pg" id="pg-medicines">
+        <div style="padding: 14px">
+          <div class="cd">
+            <div class="fg">
+              <label class="fl">اسم الدواء *</label>
+              <input
+                type="text"
+                class="fi"
+                id="medName"
+                placeholder="اسم الدواء"
+              />
+            </div>
+            <div class="fg">
+              <label class="fl">الاسم العلمي *</label>
+              <input
+                type="text"
+                class="fi"
+                id="medScientific"
+                placeholder="Scientific Name"
+              />
+            </div>
+            <div class="fr">
+              <div class="fg">
+                <label class="fl">الكمية *</label>
+                <input
+                  type="number"
+                  class="fi"
+                  id="medStock"
+                  placeholder="0"
+                  min="0"
+                />
+              </div>
+              <div class="fg">
+                <label class="fl">السعر *</label>
+                <input
+                  type="number"
+                  class="fi"
+                  id="medPrice"
+                  placeholder="0.00"
+                  min="0"
+                  step="0.01"
+                />
+              </div>
+            </div>
+            <div class="fg">
+              <label class="fl">تاريخ الانتهاء *</label>
+              <input type="date" class="fi" id="medExpiry" />
+            </div>
+            <div class="fg">
+              <label class="fl">الصيغة</label>
+              <input
+                type="text"
+                class="fi"
+                id="medForm"
+                placeholder="قرص، كبسولة، حقنة"
+              />
+            </div>
+            <button
+              class="bt bt-p"
+              id="saveMedicineBtn"
+              onclick="saveMedicine()"
+            >
+              <i class="fas fa-save"></i> حفظ الدواء
+            </button>
+          </div>
+        </div>
+        <div id="medicinesList" style="padding: 0 14px 14px"></div>
+      </div>
+
+      <!-- DISTRIBUTIONS PAGE -->
+      <div class="pg" id="pg-distributions">
+        <div style="padding: 14px">
+          <div class="cd">
+            <div class="fg">
+              <label class="fl">اختر العائلة *</label>
+              <select class="fi" id="distFamily"></select>
+            </div>
+            <div class="fg">
+              <label class="fl">اختر الدواء *</label>
+              <select class="fi" id="distMedicine"></select>
+            </div>
+            <div class="fg">
+              <label class="fl">اختر الصيدلية *</label>
+              <select class="fi" id="distPharmacy"></select>
+            </div>
+            <div class="fr">
+              <div class="fg">
+                <label class="fl">صيدلية خارجية</label>
+                <input
+                  type="number"
+                  class="fi"
+                  id="distExternal"
+                  placeholder="0"
+                  min="0"
+                />
+              </div>
+              <div class="fg">
+                <label class="fl">صيدلية داخلية</label>
+                <input
+                  type="number"
+                  class="fi"
+                  id="distInternal"
+                  placeholder="0"
+                  min="0"
+                />
+              </div>
+            </div>
+            <div class="fg">
+              <label class="fl">ملاحظات</label>
+              <input
+                type="text"
+                class="fi"
+                id="distNotes"
+                placeholder="ملاحظات"
+              />
+            </div>
+            <button class="bt bt-p" onclick="saveDistribution()">
+              <i class="fas fa-check"></i> تسجيل الصرف
+            </button>
+          </div>
+        </div>
+        <div id="distributionsList" style="padding: 0 14px 14px"></div>
+      </div>
+
+      <!-- REPORTS PAGE -->
+      <div class="pg" id="pg-reports">
+        <div id="reportsContent" style="padding: 14px"></div>
+      </div>
+
+      <!-- SETTINGS PAGE -->
+      <div class="pg" id="pg-settings">
+        <div style="padding: 14px">
+          <div class="cd">
+            <div style="text-align: center; color: var(--txt2); padding: 20px">
+              <div style="font-size: 24px; margin-bottom: 10px">
+                <i class="fas fa-server"></i>
+              </div>
+              <div>النظام متصل بنجاح</div>
+              <div style="font-size: 11px; margin-top: 5px">
+                Node.js Backend API
+              </div>
+            </div>
+          </div>
+          <div class="cd" id="adminDataImportExportSection" style="display: none; margin-top: 12px">
+            <div style="text-align: center">
+              <div style="font-size: 16px; font-weight: 700; color: var(--pri); margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 8px">
+                <i class="fas fa-exchange-alt"></i> استيراد وتصدير البيانات
+              </div>
+              <button class="bt" onclick="nav('import-export')" style="background: var(--pri); color: white; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px">
+                <i class="fas fa-database"></i> إدارة بيانات النظام
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DATA IMPORT/EXPORT PAGE -->
+      <div class="pg" id="pg-import-export">
+        <div style="padding: 14px">
+          <h2 style="font-size: 18px; font-weight: 700; color: var(--pri); margin-bottom: 16px; text-align: center">استيراد وتصدير البيانات</h2>
+          
+          <!-- PATIENTS IMPORT/EXPORT SECTION -->
+          <div class="cd" style="margin-bottom: 12px">
+            <div style="text-align: center; margin-bottom: 16px">
+              <div style="font-size: 16px; font-weight: 700; color: var(--txt); margin-bottom: 8px; display: flex; align-items: center; justify-content: center; gap: 8px">
+                <i class="fas fa-users" style="color: var(--pri)"></i> استيراد المرضى
+              </div>
+              <button class="bt" onclick="downloadPatientTemplate()" style="background: white; color: var(--pri); border: 2px solid var(--pri); width: 100%; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 8px">
+                <i class="fas fa-download"></i> تحميل القالب
+              </button>
+            </div>
+            
+            <div style="
+              border: 2px dashed var(--brd);
+              border-radius: 8px;
+              padding: 24px;
+              text-align: center;
+              background: rgba(45, 106, 79, 0.05);
+              margin-bottom: 12px;
+              cursor: pointer;
+              transition: all 0.3s;
+            " id="patientDropZone" ondrop="handleDropPatients(event)" ondragover="event.preventDefault()" ondragleave="this.style.opacity='1'" ondragenter="this.style.opacity='0.8'">
+              <div style="font-size: 32px; margin-bottom: 8px">📤</div>
+              <div style="font-size: 12px; color: var(--txt2); margin-bottom: 4px">اضغط لاختيار ملف Excel أو اسحبه هنا</div>
+              <input type="file" id="patientFileInput" accept=".xlsx,.xls" style="display: none" onchange="handlePatientFileSelect(event)" />
+              <button class="bt" onclick="document.getElementById('patientFileInput').click()" style="background: var(--pri); color: white; margin-top: 12px; display: flex; align-items: center; justify-content: center; gap: 8px; margin-left: auto; margin-right: auto">
+                <i class="fas fa-file-excel"></i> اختر ملف Excel
+              </button>
+            </div>
+            
+            <button class="bt" onclick="importPatients()" style="background: var(--pri); color: white; width: 100%">
+              <i class="fas fa-check"></i> استيراد المرضى
+            </button>
+          </div>
+          
+          <!-- MEDICINES IMPORT/EXPORT SECTION -->
+          <div class="cd" style="margin-bottom: 12px">
+            <div style="text-align: center; margin-bottom: 16px">
+              <div style="font-size: 16px; font-weight: 700; color: var(--txt); margin-bottom: 8px; display: flex; align-items: center; justify-content: center; gap: 8px">
+                <i class="fas fa-pills" style="color: var(--acc)"></i> استيراد الأدوية
+              </div>
+              <button class="bt" onclick="downloadMedicinesTemplate()" style="background: white; color: var(--acc); border: 2px solid var(--acc); width: 100%; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 8px">
+                <i class="fas fa-download"></i> تحميل القالب
+              </button>
+            </div>
+            
+            <div style="
+              border: 2px dashed var(--brd);
+              border-radius: 8px;
+              padding: 24px;
+              text-align: center;
+              background: rgba(231, 111, 81, 0.05);
+              margin-bottom: 12px;
+              cursor: pointer;
+              transition: all 0.3s;
+            " id="medicinesDropZone" ondrop="handleDropMedicines(event)" ondragover="event.preventDefault()" ondragleave="this.style.opacity='1'" ondragenter="this.style.opacity='0.8'">
+              <div style="font-size: 32px; margin-bottom: 8px">📤</div>
+              <div style="font-size: 12px; color: var(--txt2); margin-bottom: 4px">اضغط لاختيار ملف Excel أو اسحبه هنا</div>
+              <input type="file" id="medicinesFileInput" accept=".xlsx,.xls" style="display: none" onchange="handleMedicinesFileSelect(event)" />
+              <button class="bt" onclick="document.getElementById('medicinesFileInput').click()" style="background: var(--acc); color: white; margin-top: 12px; display: flex; align-items: center; justify-content: center; gap: 8px; margin-left: auto; margin-right: auto">
+                <i class="fas fa-file-excel"></i> اختر ملف Excel
+              </button>
+            </div>
+            
+            <button class="bt" onclick="importMedicines()" style="background: var(--acc); color: white; width: 100%">
+              <i class="fas fa-check"></i> استيراد الأدوية
+            </button>
+          </div>
+          
+          <!-- EXPORT SECTION -->
+          <div class="cd">
+            <div style="text-align: center; margin-bottom: 12px">
+              <div style="font-size: 16px; font-weight: 700; color: var(--txt); margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 8px">
+                <i class="fas fa-download" style="color: var(--gold)"></i> تصدير البيانات
+              </div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px">
+              <button class="bt" onclick="exportPatientsData()" style="background: var(--pri); color: white; display: flex; align-items: center; justify-content: center; gap: 8px">
+                <i class="fas fa-download"></i> تصدير المرضى
+              </button>
+              <button class="bt" onclick="exportMedicinesData()" style="background: var(--acc); color: white; display: flex; align-items: center; justify-content: center; gap: 8px">
+                <i class="fas fa-download"></i> تصدير الأدوية
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAMILY DETAILS PAGE -->
+      <div class="pg" id="pg-family-details">
+        <div style="padding: 14px">
+          <!-- Family Header -->
+          <div
+            class="cd"
+            style="
+              padding: 0;
+              background: linear-gradient(
+                135deg,
+                var(--pri) 0%,
+                var(--pri-p) 100%
+              );
+              color: white;
+              margin-bottom: 0;
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              gap: 12px;
+            "
+          >
+            <div style="display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0">
+              <div
+                id="familyAvatar"
+                style="
+                  width: 50px;
+                  height: 50px;
+                  border-radius: 8px;
+                  background: rgba(255, 255, 255, 0.2);
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  font-weight: 800;
+                  font-size: 18px;
+                  flex-shrink: 0;
+                  margin: 12px;
+                "
+              ></div>
+              <div style="flex: 1; min-width: 0">
+                <div
+                  id="familyHeaderName"
+                  style="font-size: 14px; font-weight: 700; margin-bottom: 4px"
+                ></div>
+                <div
+                  id="familyHeaderCode"
+                  style="font-size: 11px; opacity: 0.9"
+                ></div>
+              </div>
+            </div>
+            <button
+              class="bt"
+              onclick="openEditFamilyModal()"
+              style="
+                background: rgba(255, 255, 255, 0.2);
+                color: white;
+                border: none;
+                width: 40px;
+                height: 40px;
+                border-radius: 6px;
+                margin-right: 12px;
+                flex-shrink: 0;
+                cursor: pointer;
+              "
+              title="تعديل البيانات"
+            >
+              <i class="fas fa-edit"></i>
+            </button>
+          </div>
+
+          <!-- Tabs Navigation -->
+          <div
+            style="
+              display: flex;
+              gap: 0;
+              background: white;
+              border-bottom: 1px solid var(--brd);
+              overflow-x: auto;
+              margin-bottom: 14px;
+            "
+            id="familyTabs"
+          >
+            <button
+              class="family-tab act"
+              data-tab="data"
+              onclick="switchFamilyTab('data')"
+              style="
+                flex: 1;
+                padding: 12px;
+                background: none;
+                border: none;
+                cursor: pointer;
+                font-size: 12px;
+                font-weight: 600;
+                color: var(--txt2);
+                border-bottom: 3px solid transparent;
+                white-space: nowrap;
+              "
+            >
+              البيانات
+            </button>
+            <button
+              class="family-tab"
+              data-tab="monthly"
+              onclick="switchFamilyTab('monthly')"
+              style="
+                flex: 1;
+                padding: 12px;
+                background: none;
+                border: none;
+                cursor: pointer;
+                font-size: 12px;
+                font-weight: 600;
+                color: var(--txt2);
+                border-bottom: 3px solid transparent;
+                white-space: nowrap;
+              "
+            >
+              الشهري
+            </button>
+            <button
+              class="family-tab"
+              data-tab="additional"
+              onclick="switchFamilyTab('additional')"
+              style="
+                flex: 1;
+                padding: 12px;
+                background: none;
+                border: none;
+                cursor: pointer;
+                font-size: 12px;
+                font-weight: 600;
+                color: var(--txt2);
+                border-bottom: 3px solid transparent;
+                white-space: nowrap;
+              "
+            >
+              إضافي
+            </button>
+            <button
+              class="family-tab"
+              data-tab="medicines"
+              onclick="switchFamilyTab('medicines')"
+              style="
+                flex: 1;
+                padding: 12px;
+                background: none;
+                border: none;
+                cursor: pointer;
+                font-size: 12px;
+                font-weight: 600;
+                color: var(--txt2);
+                border-bottom: 3px solid transparent;
+                white-space: nowrap;
+              "
+            >
+              الصرف
+            </button>
+            <button
+              class="family-tab"
+              data-tab="report"
+              onclick="switchFamilyTab('report')"
+              style="
+                flex: 1;
+                padding: 12px;
+                background: none;
+                border: none;
+                cursor: pointer;
+                font-size: 12px;
+                font-weight: 600;
+                color: var(--txt2);
+                border-bottom: 3px solid transparent;
+                white-space: nowrap;
+              "
+            >
+              التقرير
+            </button>
+          </div>
+
+          <!-- Tab: البيانات (Data) -->
+          <div id="tab-data" class="family-tab-content act" style="display: block">
+            <div class="cd" style="margin-bottom: 14px">
+              <div
+                style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px"
+              >
+                <div
+                  style="
+                    background: var(--bg2);
+                    padding: 10px;
+                    border-radius: 6px;
+                  "
+                >
+                  <div
+                    style="
+                      font-size: 10px;
+                      color: var(--txt2);
+                      margin-bottom: 4px;
+                    "
+                  >
+                    الكود
+                  </div>
+                  <div
+                    id="infoCode"
+                    style="font-size: 12px; font-weight: 700; color: var(--pri)"
+                  ></div>
+                </div>
+                <div
+                  style="
+                    background: var(--bg2);
+                    padding: 10px;
+                    border-radius: 6px;
+                  "
+                >
+                  <div
+                    style="
+                      font-size: 10px;
+                      color: var(--txt2);
+                      margin-bottom: 4px;
+                    "
+                  >
+                    المنطقة
+                  </div>
+                  <div
+                    id="infoZone"
+                    style="font-size: 12px; font-weight: 700; color: var(--pri)"
+                  ></div>
+                </div>
+                <div
+                  style="
+                    background: var(--bg2);
+                    padding: 10px;
+                    border-radius: 6px;
+                  "
+                >
+                  <div
+                    style="
+                      font-size: 10px;
+                      color: var(--txt2);
+                      margin-bottom: 4px;
+                    "
+                  >
+                    عدد الأفراد
+                  </div>
+                  <div
+                    id="infoMembers"
+                    style="font-size: 12px; font-weight: 700; color: var(--pri)"
+                  ></div>
+                </div>
+                <div
+                  style="
+                    background: var(--bg2);
+                    padding: 10px;
+                    border-radius: 6px;
+                  "
+                >
+                  <div
+                    style="
+                      font-size: 10px;
+                      color: var(--txt2);
+                      margin-bottom: 4px;
+                  "
+                >
+                  الفئة
+                </div>
+                <div
+                  id="infoCategory"
+                  style="font-size: 12px; font-weight: 700; color: var(--pri)"
+                ></div>
+              </div>
+              <div
+                style="
+                  background: var(--bg2);
+                  padding: 10px;
+                  border-radius: 6px;
+                "
+              >
+                <div
+                  style="
+                    font-size: 10px;
+                    color: var(--txt2);
+                    margin-bottom: 4px;
+                  "
+                >
+                  الهاتف
+                </div>
+                <div
+                  id="infoPhone"
+                  style="font-size: 12px; font-weight: 600; color: var(--txt)"
+                ></div>
+              </div>
+              <div
+                style="
+                  background: var(--bg2);
+                  padding: 10px;
+                  border-radius: 6px;
+                "
+              >
+                <div
+                  style="
+                    font-size: 10px;
+                    color: var(--txt2);
+                    margin-bottom: 4px;
+                  "
+                >
+                  الرقم القومي
+                </div>
+                <div
+                  id="infoNationalId"
+                  style="font-size: 12px; font-weight: 600; color: var(--txt)"
+                ></div>
+              </div>
+            </div>
+            <div style="margin-top: 12px">
+              <div
+                style="font-size: 11px; color: var(--txt2); margin-bottom: 6px"
+              >
+                العنوان
+              </div>
+              <div
+                id="infoAddress"
+                style="font-size: 12px; color: var(--txt); padding: 8px; background: var(--bg2); border-radius: 6px;"
+              ></div>
+            </div>
+            <div style="margin-top: 12px">
+              <div
+                style="font-size: 11px; color: var(--txt2); margin-bottom: 6px"
+              >
+                ملاحظات
+              </div>
+              <div
+                id="infoNotes"
+                style="font-size: 12px; color: var(--txt); padding: 8px; background: var(--bg2); border-radius: 6px;"
+              ></div>
+            </div>
+          </div>
+
+          <!-- Tab: الشهري (Monthly) -->
+          <div id="tab-monthly" class="family-tab-content" style="display: none">
+            <div class="cd" style="margin-bottom: 14px; background: linear-gradient(135deg, rgba(45, 106, 79, 0.1) 0%, rgba(231, 111, 81, 0.1) 100%)">
+              <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px">
+                <div style="background: white; padding: 12px; border-radius: 8px; text-align: center">
+                  <div style="font-size: 10px; color: var(--txt2); margin-bottom: 6px">تكلفة الشهر الحالي</div>
+                  <div id="monthlyCost" style="font-size: 16px; font-weight: 900; color: var(--acc)">0.0-</div>
+                </div>
+                <div style="background: white; padding: 12px; border-radius: 8px; text-align: center">
+                  <div style="font-size: 10px; color: var(--txt2); margin-bottom: 6px">المتوسط الشهري</div>
+                  <div id="monthlyAverage" style="font-size: 16px; font-weight: 900; color: var(--pri)">0.0-</div>
+                </div>
+                <div style="background: white; padding: 12px; border-radius: 8px; text-align: center">
+                  <div style="font-size: 10px; color: var(--txt2); margin-bottom: 6px">الرصيد الحالي</div>
+                  <div id="monthlyBalance" style="font-size: 16px; font-weight: 900; color: var(--gold)">0.0-</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab: إضافي (Additional) - Emergency Distribution -->
+          <div id="tab-additional" class="family-tab-content" style="display: none">
+            <!-- Emergency Distribution Form -->
+            <div class="cd" style="margin-bottom: 14px">
+              <div style="font-size: 13px; font-weight: 700; color: var(--txt); margin-bottom: 12px; display: flex; align-items: center; gap: 8px">
+                <i class="fas fa-exclamation-circle" style="color: var(--err)"></i>
+                صرف علاج إضافي في الطوارئ
+              </div>
+              <div style="background: rgba(231, 111, 81, 0.1); padding: 10px; border-radius: 6px; margin-bottom: 12px; font-size: 11px; color: var(--txt2)">
+                ⚠️ استخدم هذه الخاصية لصرف علاجات إضافية في حالات الطوارئ الطبية خلال الشهر
+              </div>
+              
+              <div class="fg">
+                <label class="fl">اختر الدواء *</label>
+                <select class="fi" id="emergencyMedicineId" required>
+                  <option value="">-- اختر دواء --</option>
+                </select>
+              </div>
+              <div class="fr">
+                <div class="fg">
+                  <label class="fl">الكمية الخارجية</label>
+                  <input type="number" class="fi" id="emergencyQtyExternal" placeholder="0" min="0" />
+                </div>
+                <div class="fg">
+                  <label class="fl">الكمية الداخلية</label>
+                  <input type="number" class="fi" id="emergencyQtyInternal" placeholder="0" min="0" />
+                </div>
+              </div>
+              <div class="fg">
+                <label class="fl">اختر الصيدلية *</label>
+                <select class="fi" id="emergencyPharmacyId" required>
+                  <option value="">-- اختر صيدلية --</option>
+                </select>
+              </div>
+              <div class="fg">
+                <label class="fl">ملاحظات إضافية</label>
+                <textarea class="fi" id="emergencyNotes" placeholder="ملاحظات حول هذا الصرف الإضافي" style="min-height: 80px; resize: vertical"></textarea>
+              </div>
+              <button class="bt" onclick="submitEmergencyDistribution()" style="background: var(--err); color: white; width: 100%; margin-top: 12px">
+                <i class="fas fa-check"></i> تأكيد الصرف الإضافي
+              </button>
+            </div>
+            
+            <!-- Emergency Distributions History -->
+            <div class="cd">
+              <div style="font-size: 13px; font-weight: 700; color: var(--txt); margin-bottom: 12px; display: flex; align-items: center; gap: 8px">
+                <i class="fas fa-history" style="color: var(--acc)"></i>
+                سجل الصرفيات الإضافية
+              </div>
+              <div id="emergencyDistributionsHistory" style="background: white; border-radius: 8px; overflow: hidden">
+                <!-- Will be filled by JavaScript -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab: الصرف (Medicines Distribution) -->
+          <div id="tab-medicines" class="family-tab-content" style="display: none">
+            <div class="cd" style="margin-bottom: 14px">
+              <div style="font-size: 13px; font-weight: 700; color: var(--txt); margin-bottom: 12px; display: flex; align-items: center; gap: 8px">
+                <i class="fas fa-pills" style="color: var(--acc)"></i>
+                الأدوية المصروفة هذا الشهر
+              </div>
+              <div id="medicinesContainer" style="background: white; border-radius: 8px; overflow: hidden">
+                <!-- Will be filled by JavaScript -->
+              </div>
+              <div id="monthlyTotals" style="margin-top: 12px; background: rgba(45, 106, 79, 0.1); padding: 12px; border-radius: 8px">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px">
+                  <div>
+                    <div style="font-size: 10px; color: var(--txt2); margin-bottom: 4px">إجمالي الكمية</div>
+                    <div id="totalQuantity" style="font-size: 16px; font-weight: 900; color: var(--pri)"></div>
+                  </div>
+                  <div>
+                    <div style="font-size: 10px; color: var(--txt2); margin-bottom: 4px">إجمالي التكلفة</div>
+                    <div id="totalCost" style="font-size: 16px; font-weight: 900; color: var(--acc)"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab: التقرير (Report) -->
+          <div id="tab-report" class="family-tab-content" style="display: none">
+            <div class="cd">
+              <div style="font-size: 13px; font-weight: 700; color: var(--txt); margin-bottom: 12px; display: flex; align-items: center; gap: 8px">
+                <i class="fas fa-file-pdf" style="color: var(--pri)"></i>
+                خيارات التقرير
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr; gap: 10px">
+                <button class="bt" onclick="printFamilyReport()" style="background: var(--pri); color: white; display: flex; align-items: center; justify-content: center; gap: 8px">
+                  <i class="fas fa-print"></i> طباعة التقرير
+                </button>
+                <button class="bt" onclick="exportFamilyPDF()" style="background: var(--acc); color: white; display: flex; align-items: center; justify-content: center; gap: 8px">
+                  <i class="fas fa-file-pdf"></i> حفظ PDF
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Monthly Distribution Summary -->
+          <div
+            class="cd"
+            style="
+              margin-bottom: 14px;
+              background: linear-gradient(
+                135deg,
+                rgba(45, 106, 79, 0.1) 0%,
+                rgba(231, 111, 81, 0.1) 100%
+              );
+            "
+          >
+            <div
+              style="
+                font-size: 13px;
+                font-weight: 700;
+                color: var(--txt);
+                margin-bottom: 12px;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+              "
+            >
+              <i class="fas fa-pills" style="color: var(--acc)"></i>
+              الأدوية المصروفة هذا الشهر
+            </div>
+            <div
+              id="medicinesContainer"
+              style="background: white; border-radius: 8px; overflow: hidden"
+            >
+              <!-- Will be filled by JavaScript -->
+            </div>
+            <div
+              id="monthlyTotals"
+              style="
+                margin-top: 12px;
+                background: rgba(45, 106, 79, 0.1);
+                padding: 12px;
+                border-radius: 8px;
+              "
+            >
+              <div
+                style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px"
+              >
+                <div>
+                  <div
+                    style="
+                      font-size: 10px;
+                      color: var(--txt2);
+                      margin-bottom: 4px;
+                    "
+                  >
+                    إجمالي الكمية
+                  </div>
+                  <div
+                    id="totalQuantity"
+                    style="font-size: 16px; font-weight: 900; color: var(--pri)"
+                  ></div>
+                </div>
+                <div>
+                  <div
+                    style="
+                      font-size: 10px;
+                      color: var(--txt2);
+                      margin-bottom: 4px;
+                    "
+                  >
+                    إجمالي التكلفة
+                  </div>
+                  <div
+                    id="totalCost"
+                    style="font-size: 16px; font-weight: 900; color: var(--acc)"
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px">
+            <button
+              class="bt"
+              onclick="printFamilyReport()"
+              style="
+                background: var(--pri);
+                color: white;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+              "
+            >
+              <i class="fas fa-print"></i> طباعة التقرير
+            </button>
+            <button
+              class="bt"
+              onclick="exportFamilyPDF()"
+              style="
+                background: var(--acc);
+                color: white;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+              "
+            >
+              <i class="fas fa-file-pdf"></i> حفظ PDF
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- EDIT FAMILY MODAL -->
+      <div class="pg" id="pg-edit-family" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.5); z-index: 1500">
+        <div style="position: absolute; bottom: 0; left: 0; right: 0; max-height: 90vh; background: white; border-radius: 16px 16px 0 0; overflow-y: auto">
+          <div style="padding: 20px 14px 14px">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px">
+              <h2 style="font-size: 16px; font-weight: 700; color: var(--txt)">تعديل بيانات العائلة</h2>
+              <button onclick="closeEditFamilyModal()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: var(--txt)">×</button>
+            </div>
+            
+            <div class="cd">
+              <div class="fg">
+                <label class="fl">اسم رب الأسرة *</label>
+                <input type="text" class="fi" id="editFamilyName" placeholder="اسم رباعي" />
+              </div>
+              <div class="fr">
+                <div class="fg">
+                  <label class="fl">الرقم القومي</label>
+                  <input type="text" class="fi" id="editFamilyNID" placeholder="14 رقم" maxlength="14" style="font-family: monospace; letter-spacing: 1px" />
+                </div>
+                <div class="fg">
+                  <label class="fl">الهاتف</label>
+                  <input type="tel" class="fi" id="editFamilyPhone" placeholder="01xxxxxxxxx" />
+                </div>
+              </div>
+              <div class="fg">
+                <label class="fl">العنوان</label>
+                <textarea class="fi" id="editFamilyAddress" placeholder="العنوان الكامل" style="min-height: 80px; resize: vertical"></textarea>
+              </div>
+              <div class="fr">
+                <div class="fg">
+                  <label class="fl">المنطقة</label>
+                  <select class="fi" id="editFamilyZone">
+                    <option value="A1">A1</option>
+                    <option value="A2">A2</option>
+                    <option value="A3">A3</option>
+                    <option value="B1">B1</option>
+                    <option value="B2">B2</option>
+                  </select>
+                </div>
+                <div class="fg">
+                  <label class="fl">الفئة</label>
+                  <select class="fi" id="editFamilyCategory">
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                  </select>
+                </div>
+              </div>
+              <div class="fg">
+                <label class="fl">عدد الأفراد</label>
+                <input type="number" class="fi" id="editFamilyMembers" placeholder="عدد الأفراد" min="1" />
+              </div>
+              <div class="fg">
+                <label class="fl">ملاحظات</label>
+                <textarea class="fi" id="editFamilyNotes" placeholder="ملاحظات" style="min-height: 80px; resize: vertical"></textarea>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px">
+                <button class="bt" onclick="closeEditFamilyModal()" style="background: var(--brd); color: var(--txt)">إلغاء</button>
+                <button class="bt" onclick="saveEditedFamily()" style="background: var(--pri); color: white">حفظ التغييرات</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast" style="position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); padding: 12px 20px; background: var(--pri); color: white; border-radius: 8px; z-index: 2000; opacity: 0; transition: opacity 0.3s; pointer-events: none" class="toast"></div>
+
+    <!-- BOTTOM NAVIGATION -->
+    <nav class="bn" id="BN">
+      <button class="ni act" onclick="nav('home')">
+        <i class="fas fa-home"></i><span>الرئيسية</span>
+      </button>
+      <button class="ni" onclick="nav('families')">
+        <i class="fas fa-users"></i><span>العائلات</span>
+      </button>
+      <button class="ni na" onclick="nav('medicines')">
+        <i class="fas fa-plus"></i>
+      </button>
+      <button class="ni" onclick="nav('distributions')">
+        <i class="fas fa-pills"></i><span>الصرف</span>
+      </button>
+      <button class="ni" onclick="nav('settings')">
+        <i class="fas fa-cog"></i><span>الإعدادات</span>
+      </button>
+    </nav>
+
+    <!-- Toast Notification -->
+    <div class="tt" id="toast"></div>
+
+    <!-- ════════════════════════════════════════════════════════════════════════════════
+     JAVASCRIPT - Load External Scripts
+     ════════════════════════════════════════════════════════════════════════════════ -->
+
+    <!-- API Communication -->
+    <script src="js/api.js"></script>
+
+    <!-- App State & Utilities -->
+    <script src="js/app.js"></script>
+
+    <!-- Authentication -->
+    <script src="js/auth.js"></script>
+
+    <!-- Page Scripts -->
+    <script src="js/home.js"></script>
+    <script src="js/families.js"></script>
+    <script src="js/medicines.js"></script>
+    <script src="js/distributions.js"></script>
+    <script src="js/reports.js"></script>
+    <script src="js/family-details.js"></script>
+    <script src="js/family-details-new-functions.js"></script>
+    <script src="js/settings.js"></script>
+    <script src="js/import-export.js"></script>
+  </body>
+</html>
