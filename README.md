@@ -669,15 +669,15 @@ Server logs all operations to console:
 
 **Project**: Brothers of Lord - Pharmacy Management System  
 **Version**: 1.0.0  
-**Last Updated**: January 2024
+**Last Updated**: June 2026
 
-For issues, questions, or contributions, please contact the development team.
+For issues, questions, or contributions, please contact the development team. [kyrilloselia2@gmail.com]
 
 ---
 
 ## 📄 License
 
-All rights reserved. This system is proprietary software of Brothers of Lord Organization.
+All rights reserved. This system is proprietary software of Saint Mary and St. Michael Coptic Orthodox Church.
 
 ---
 
